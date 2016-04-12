@@ -14,11 +14,13 @@ type WebServer interface {
 type webServer struct {
 	port     int
 	listener net.Listener
+	handler  http.Handler
 }
 
-func NewWebServer(port int) WebServer {
+func NewWebServer(port int, handler http.Handler) WebServer {
 	return &webServer{
-		port: port,
+		port:    port,
+		handler: handler,
 	}
 }
 
@@ -31,9 +33,8 @@ func (ws *webServer) Start() (chan (error), error) {
 	}
 
 	serverErr := make(chan error)
-
 	go func() {
-		serverErr <- http.Serve(ws.listener, nil)
+		serverErr <- http.Serve(ws.listener, ws.handler)
 	}()
 
 	return serverErr, nil

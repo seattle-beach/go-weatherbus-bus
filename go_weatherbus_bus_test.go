@@ -21,6 +21,7 @@ var _ = Describe("GoWeatherbusBus", func() {
 		cmd := exec.Command(path)
 		sess, err = gexec.Start(cmd, GinkgoWriter, GinkgoWriter)
 		Expect(err).NotTo(HaveOccurred())
+
 		Eventually(sess.Out).Should(gbytes.Say("Ready"))
 		Expect(sess).ShouldNot(gexec.Exit())
 	})
