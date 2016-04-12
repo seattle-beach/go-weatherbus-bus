@@ -8,6 +8,7 @@ import (
 	"syscall"
 
 	"github.com/seattle-beach/go-weatherbus-bus/handler"
+	"github.com/seattle-beach/go-weatherbus-bus/onebusaway"
 	"github.com/seattle-beach/go-weatherbus-bus/webserver"
 )
 
@@ -15,7 +16,8 @@ func main() {
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 
-	server := webserver.NewWebServer(9092, handler.NewHandler(nil))
+	oba := onebusaway.NewClient("http://api.pugetsound.onebusaway.org")
+	server := webserver.NewWebServer(9092, handler.NewHandler(oba))
 	serverErrors, err := server.Start()
 
 	if err != nil {

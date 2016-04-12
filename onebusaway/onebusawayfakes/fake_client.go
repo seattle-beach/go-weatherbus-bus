@@ -8,17 +8,18 @@ import (
 )
 
 type FakeClient struct {
-	GetStopStub        func(stopID string) error
+	GetStopStub        func(stopID string) (onebusaway.Stop, error)
 	getStopMutex       sync.RWMutex
 	getStopArgsForCall []struct {
 		stopID string
 	}
 	getStopReturns struct {
-		result1 error
+		result1 onebusaway.Stop
+		result2 error
 	}
 }
 
-func (fake *FakeClient) GetStop(stopID string) error {
+func (fake *FakeClient) GetStop(stopID string) (onebusaway.Stop, error) {
 	fake.getStopMutex.Lock()
 	fake.getStopArgsForCall = append(fake.getStopArgsForCall, struct {
 		stopID string
@@ -27,7 +28,7 @@ func (fake *FakeClient) GetStop(stopID string) error {
 	if fake.GetStopStub != nil {
 		return fake.GetStopStub(stopID)
 	} else {
-		return fake.getStopReturns.result1
+		return fake.getStopReturns.result1, fake.getStopReturns.result2
 	}
 }
 
@@ -43,11 +44,12 @@ func (fake *FakeClient) GetStopArgsForCall(i int) string {
 	return fake.getStopArgsForCall[i].stopID
 }
 
-func (fake *FakeClient) GetStopReturns(result1 error) {
+func (fake *FakeClient) GetStopReturns(result1 onebusaway.Stop, result2 error) {
 	fake.GetStopStub = nil
 	fake.getStopReturns = struct {
-		result1 error
-	}{result1}
+		result1 onebusaway.Stop
+		result2 error
+	}{result1, result2}
 }
 
 var _ onebusaway.Client = new(FakeClient)
