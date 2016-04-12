@@ -3,7 +3,6 @@ package onebusaway
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 )
 
@@ -12,8 +11,6 @@ import (
 type Client interface {
 	GetStop(stopID string) (Stop, error)
 }
-
-var StopNotFoundError = errors.New("stop-not-found")
 
 type stopResponseRoot struct {
 	Data stopData `json:"data"`
@@ -47,13 +44,16 @@ func (c *client) GetStop(stopID string) (Stop, error) {
 		return Stop{}, err
 	}
 
-	defer response.Body.Close()
-	decoder := json.NewDecoder(response.Body)
-	var root stopResponseRoot
-	err = decoder.Decode(&root)
+	if response.StatusCode != http.StatusOK {
+		return Stop{}, errors.New("Service returned " + response.Status)
+	}
 
-	if err != nil {
-		fmt.Printf("Decode ERROR!!!!!! %s\n", err.Error())
+	defer response.Body.Close()
+	var root stopResponseRoot
+	json.NewDecoder(response.Body).Decode(&root)
+
+	if (root.Data == stopData{}) {
+		return Stop{}, errors.New("One Bus Away failure")
 	}
 
 	return root.Data.Entry, nil

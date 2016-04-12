@@ -76,16 +76,6 @@ var _ = Describe("Handler", func() {
 			})
 		})
 
-		Context("when the call returns a StopNotFoundError", func() {
-			BeforeEach(func() {
-				fakeClient.GetStopReturns(onebusaway.Stop{}, onebusaway.StopNotFoundError)
-			})
-
-			It("returns a 404 error", func() {
-				Expect(writer.Code).To(Equal(http.StatusNotFound))
-			})
-		})
-
 		Context("when the call returns an unknown error", func() {
 			BeforeEach(func() {
 				fakeClient.GetStopReturns(onebusaway.Stop{}, errors.New("wtf"))

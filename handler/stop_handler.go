@@ -33,11 +33,7 @@ func (sh *stopHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	obaStop, err := sh.oneBusAwayClient.GetStop(pathAry[len(pathAry)-1])
 	if err != nil {
-		if err == onebusaway.StopNotFoundError {
-			w.WriteHeader(http.StatusNotFound)
-		} else {
-			w.WriteHeader(http.StatusInternalServerError)
-		}
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
