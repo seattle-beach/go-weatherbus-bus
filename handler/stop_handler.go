@@ -12,18 +12,6 @@ type stopHandler struct {
 	oneBusAwayClient onebusaway.Client
 }
 
-type stopData struct {
-	Data stop `json:"data"`
-}
-
-type stop struct {
-	StopID    string  `json:"stopId"`
-	Name      string  `json:"name"`
-	Lat       float64 `json:"latitude"`
-	Long      float64 `json:"longitude"`
-	Direction string  `json:"direction"`
-}
-
 func NewStopHandler(client onebusaway.Client) http.Handler {
 	return &stopHandler{client}
 }
@@ -43,12 +31,24 @@ func (sh *stopHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(stopData{presentedStop})
 }
 
-func getPresentedStop(obaStop onebusaway.Stop) stop {
-	return stop{
+func getPresentedStop(obaStop onebusaway.Stop) stopPresenter {
+	return stopPresenter{
 		StopID:    obaStop.StopID,
 		Name:      obaStop.Name,
 		Lat:       obaStop.Lat,
 		Long:      obaStop.Long,
 		Direction: obaStop.Direction,
 	}
+}
+
+type stopData struct {
+	Data stopPresenter `json:"data"`
+}
+
+type stopPresenter struct {
+	StopID    string  `json:"stopId"`
+	Name      string  `json:"name"`
+	Lat       float64 `json:"latitude"`
+	Long      float64 `json:"longitude"`
+	Direction string  `json:"direction"`
 }
