@@ -1,3 +1,5 @@
+A Go clone of [weatherbus-bus](https://github.com/seattle-beach/weatherbus-bus)
+
 # Getting started
 
 1. Clone the repo
