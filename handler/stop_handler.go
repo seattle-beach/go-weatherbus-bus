@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/seattle-beach/go-weatherbus-bus/onebusaway"
+	"fmt"
 )
 
 type stopHandler struct {
@@ -33,6 +34,7 @@ func (sh *stopHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	obaStop, err := sh.oneBusAwayClient.GetStop(pathAry[len(pathAry)-1])
 	if err != nil {
+		fmt.Println("Error requesting stop: ", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
