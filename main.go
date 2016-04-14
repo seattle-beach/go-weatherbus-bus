@@ -25,7 +25,7 @@ func main() {
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 
 	oba := onebusaway.NewClient(baseUrl)
-	server := webserver.NewWebServer(9092, handler.NewHandler(oba))
+	server := webserver.NewWebServer(9090, handler.NewHandler(oba))
 	serverErrors, err := server.Start()
 
 	if err != nil {

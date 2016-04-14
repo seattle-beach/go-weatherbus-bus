@@ -67,7 +67,7 @@ var _ = Describe("GoWeatherbusBus", func() {
 			),
 		)
 
-		resp, err := http.Get("http://localhost:9092/api/v1/stops/1_619")
+		resp, err := http.Get("http://localhost:9090/api/v1/stops/1_619")
 		Expect(err).NotTo(HaveOccurred())
 		Expect(resp.StatusCode).To(Equal(http.StatusOK))
 		bytes, err := ioutil.ReadAll(resp.Body)
